@@ -68,7 +68,8 @@ def show_matrix_input():  # показывает ввод матрицы
     global rows_input, columns_input, matrix_input_text, matrix_input_lbl, matrix_input_btn_done,\
         matrix_input_btn_cancel
     matrix_input_lbl.config(text=f"Введите матрицу {rows_input} x {columns_input}:")
-    matrix_input_lbl.grid(row=0, column=1, columnspan=3,  ipadx=4, ipady=4, pady=6, sticky=NSEW)
+    matrix_input_lbl.grid(row=0, column=1, columnspan=3, ipadx=4, ipady=4, pady=6, sticky=NSEW)
+    matrix_input_text.delete("1.0", END)
     matrix_input_text.grid(row=1, column=1, columnspan=3, ipadx=4, ipady=4, pady=6, sticky=NSEW)
     matrix_input_btn_done.grid(row=2, column=1, ipadx=4, ipady=4, pady=6, sticky=NSEW)
     matrix_input_btn_cancel.grid(row=2, column=3, ipadx=4, ipady=4, pady=6, sticky=NSEW)
@@ -80,6 +81,40 @@ def close_matrix_input():  # скрывает ввод матрицы
     matrix_input_lbl.grid_forget()
     matrix_input_btn_done.grid_forget()
     matrix_input_btn_cancel.grid_forget()
+
+
+def show_number_input():  # показывает ввод числа
+    global number_input_lbl, number_input_entry, number_input_btn_done, number_input_btn_cancel
+    number_input_lbl.grid(row=0, column=1, columnspan=3, ipadx=4, ipady=4, pady=6, sticky=NSEW)
+    number_input_entry.delete(0, END)
+    number_input_entry.grid(row=1, column=1, columnspan=3, ipadx=4, ipady=4, pady=6, sticky=NSEW)
+    number_input_btn_done.grid(row=2, column=1, ipadx=4, ipady=4, pady=6, sticky=NSEW)
+    number_input_btn_cancel.grid(row=2, column=3, ipadx=4, ipady=4, pady=6, sticky=NSEW)
+
+
+def close_number_input():  # показывает вывод числа
+    global number_input_lbl, number_input_entry, number_input_btn_done, number_input_btn_cancel
+    number_input_lbl.grid_forget()
+    number_input_entry.grid_forget()
+    number_input_btn_done.grid_forget()
+    number_input_btn_cancel.grid_forget()
+
+
+def show_matrix_output():  # показываем вывод итоговой матрицы
+    global matrix_output_lbl, matrix_output_lbl_result, matrix_output_btn_done, rows_output, columns_output,\
+        matrix_output
+    matrix_output_lbl.config(text=f"Ваша итоговая матрица с размерами {rows_output} x {columns_output}:")
+    matrix_output_lbl.grid(row=0, column=1, columnspan=3, ipadx=4, ipady=4, pady=6, sticky=NSEW)
+    matrix_output_lbl_result.config(text=matrix_output)
+    matrix_output_lbl_result.grid(row=1, column=1, columnspan=3, ipadx=4, ipady=4, pady=6, sticky=NSEW)
+    matrix_output_btn_done.grid(row=2, column=2, ipadx=4, ipady=4, pady=6, sticky=NSEW)
+
+
+def close_matrix_output():  # скрывает вывод итоговой матрицы
+    global matrix_output_lbl, matrix_output_lbl_result, matrix_output_btn_done
+    matrix_output_lbl.grid_forget()
+    matrix_output_lbl_result.grid_forget()
+    matrix_output_btn_done.grid_forget()
 
 
 def handle_pressing_menu_btn_1(event):
@@ -118,8 +153,21 @@ def handle_pressing_matrix_input_btn_done(event):
     global matrix_input, matrix_input_text
     # !!! пока предположим, что пользователь ввел матрицу верно
     matrix_input = matrix_input_text.get("1.0", "end")
-    close_matrix_input_text()
-    # ДАЛЬШЕ ЛОГИКА
+    close_matrix_input()
+    show_number_input()
+
+def handle_pressing_number_input_btn_done(event):
+    global number_input, number_input_entry, matrix_output, rows_input, columns_input, matrix_input
+    number_input = number_input_entry.get()
+    close_number_input()
+    # логика: передаем в модуль logic считанные от пользователя данные и получаем ответ
+    matrix_output = logic.multiply_matrix_by_number(rows_input, columns_input, matrix_input, number_input)
+    show_matrix_output()
+
+
+def handle_pressing_number_input_btn_cancel(event):
+    close_number_input()
+    show_matrix_input()
 
 
 def handle_pressing_matrix_input_btn_cancel(event):
@@ -127,15 +175,21 @@ def handle_pressing_matrix_input_btn_cancel(event):
     show_matrix_size_input()
 
 
-# создаём переменные, в которых будут лежать данные, которые считали от пользователя или которые выведем в окне
-number_input, rows_input, columns_input = None, None, None
-matrix_input, matrix_1_input, matrix_2_input = None, None, None
-# операции могут использовать одну или две матрицы, к-рые нужно сохранить, создадим флаг matrix_operation_type,
-# чтобы понять, с каким типом операции мы работаем: обработка одной или двух матриц
-matrix_operation_type = None
-# 1 - если одна матрица, тгд будет сохраняться в переменную matrix_input
-# 2 - если две матрицы, тгд текущее сохранение в matrix_1_input, затем флаг изменится на значение = 3
-# 3 - если две матрицы, текущее сохранение в matrix_2_input
+def handle_pressing_matrix_output_btn_done(event):
+    close_matrix_output()
+    show_menu()
+
+
+# создаём переменные, в которых будут лежать данные, которые считали от пользователя
+# если операция будет производиться над одной матрицей
+number_input, rows_input, columns_input, matrix_input = None, None, None, None
+# если операция будет производиться над двумя матрицами
+rows_1_input, columns_1_input, rows_2_input, columns_2_input = None, None, None, None
+matrix_1_input, matrix_2_input = None, None
+
+# создаём переменные, в которых будут лежать данные, которые будут выводиться пользователю
+rows_output, columns_output = None, None
+matrix_output = None
 
 root = Tk()  # создаём окно и привязываем его переменной root
 # через переменную root будем управлять атрибутами окна
@@ -183,7 +237,7 @@ matrix_size_input_btn_cancel.config(text="Назад")
 matrix_size_input_btn_done.bind("<Button-1>", handle_pressing_matrix_size_input_btn_done)
 matrix_size_input_btn_cancel.bind("<Button-1>", handle_pressing_matrix_size_input_btn_cancel)
 
-# виджеты для ввода матрицы - matrix_input_text
+# виджеты для ввода матрицы - matrix_input
 matrix_input_text = Text()
 matrix_input_lbl = Label()  # настраиваться текст будет в зависимости от размером матрицы
 matrix_input_btn_done, matrix_input_btn_cancel = Button(), Button()
@@ -191,6 +245,25 @@ matrix_input_btn_done.config(text="Готово")
 matrix_input_btn_cancel.config(text="Назад")
 matrix_input_btn_done.bind("<Button-1>", handle_pressing_matrix_input_btn_done)
 matrix_input_btn_cancel.bind("<Button-1>", handle_pressing_matrix_input_btn_cancel)
+
+# виджеты для ввода числа - number_input
+number_input_lbl = Label()
+number_input_lbl.config(text="Введите число, на которое будет умножаться матрица:")
+number_input_entry = Entry()
+number_input_entry.config(justify=CENTER)
+number_input_btn_done, number_input_btn_cancel = Button(), Button()
+number_input_btn_done.config(text="Готово")
+number_input_btn_cancel.config(text="Назад")
+number_input_btn_done.bind("<Button-1>", handle_pressing_number_input_btn_done)
+number_input_btn_cancel.bind("<Button-1>", handle_pressing_number_input_btn_cancel)
+
+# виджеты для вывода матрицы - matrix_output
+matrix_output_lbl = Label()  # настраиваться текст будет в зависимости от размером матрицы
+matrix_output_lbl_result = Label()  # вывод матрицы в ответе
+matrix_output_btn_done = Button()
+matrix_output_btn_done.config(text="Готово")
+matrix_output_btn_done.bind("<Button-1>", handle_pressing_matrix_output_btn_done)
+
 
 # перехватываем событие закрытия окна: если нажат крестик, вызывается функция close_app()
 root.protocol("WM_DELETE_WINDOW", close_app)
