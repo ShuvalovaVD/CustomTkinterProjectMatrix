@@ -17,7 +17,6 @@ def close_app():  # пока не изучено, опробовано лишь 
 
 def set_grid():  # создаёт сетку, в которой потом будем размещать виджеты с помощью метода .grid()
     # это один из трёх способов позиционирования, также есть pack и place
-    global root
     rows, columns = 7, 5  # сетка 7 x 5
     for i in range(rows):
         root.rowconfigure(index=i, weight=1)
@@ -26,7 +25,6 @@ def set_grid():  # создаёт сетку, в которой потом бу�
 
 
 def show_menu():  # показывает меню выбора операций над матрицами
-    global menu_btn_1, menu_btn_2, menu_btn_3, menu_btn_4, menu_btn_5, menu_btn_6, menu_lbl
     menu_lbl.grid(row=0, column=1, columnspan=3, ipadx=4, ipady=4, pady=6, sticky="nsew")
     menu_btn_1.grid(row=1, column=1, columnspan=3, ipadx=4, ipady=4, pady=6, sticky="nsew")
     menu_btn_2.grid(row=2, column=1, columnspan=3, ipadx=4, ipady=4, pady=6, sticky="nsew")
@@ -37,7 +35,6 @@ def show_menu():  # показывает меню выбора операций 
 
 
 def close_menu():  # скрывает меню
-    global menu_btn_1, menu_btn_2, menu_btn_3, menu_btn_4, menu_btn_5, menu_btn_6, menu_lbl
     menu_lbl.grid_forget()
     menu_btn_1.grid_forget()
     menu_btn_2.grid_forget()
@@ -47,8 +44,6 @@ def close_menu():  # скрывает меню
     menu_btn_6.grid_forget()
 
 def show_matrix_size_input():  # показывает ввод размеров матрицы
-    global matrix_size_input_lbl, rows_input_entry, columns_input_entry, matrix_size_input_btn_done,\
-        matrix_size_input_btn_cancel, matrix_size_input_lbl_rows, matrix_size_input_lbl_columns
     if op_step == "matrix_size_input":
         matrix_size_input_lbl.configure(text=f"Введите размеры матрицы (кол-во строк и кол-во столбцов):")
     elif op_step == "matrix_1_size_input":
@@ -67,8 +62,6 @@ def show_matrix_size_input():  # показывает ввод размеров 
 
 
 def close_matrix_size_input():  # скрывает ввод размеров матрицы
-    global matrix_size_input_lbl, rows_input_entry, columns_input_entry, matrix_size_input_btn_done,\
-        matrix_size_input_btn_cancel, matrix_size_input_lbl_rows, matrix_size_input_lbl_columns
     matrix_size_input_lbl.grid_forget()
     matrix_size_input_lbl_rows.grid_forget()
     rows_input_entry.grid_forget()
@@ -79,17 +72,13 @@ def close_matrix_size_input():  # скрывает ввод размеров м�
 
 
 def show_matrix_input():  # показывает ввод матрицы
-    global rows_input, columns_input, matrix_input_text, matrix_input_lbl, matrix_input_btn_done,\
-        matrix_input_btn_cancel, op_step, rows_1_input, columns_1_input, rows_2_input, columns_2_input
+    global op_step
     if op_step == "matrix_input":
-        rows, columns = rows_input, columns_input
-        matrix_input_lbl.configure(text=f"Введите матрицу {rows} x {columns}:")
+        matrix_input_lbl.configure(text=f"Введите матрицу {rows_input} x {columns_input}:")
     elif op_step == "matrix_1_input":
-        rows, columns = rows_1_input, columns_1_input
-        matrix_input_lbl.configure(text=f"Введите первую матрицу {rows} x {columns}:")
+        matrix_input_lbl.configure(text=f"Введите первую матрицу {rows_1_input} x {columns_1_input}:")
     else:
-        rows, columns = rows_2_input, columns_2_input
-        matrix_input_lbl.configure(text=f"Введите вторую матрицу {rows} x {columns}:")
+        matrix_input_lbl.configure(text=f"Введите вторую матрицу {rows_2_input} x {columns_2_input}:")
     matrix_input_lbl.grid(row=0, column=1, columnspan=3, ipadx=4, ipady=4, pady=6, sticky="nsew")
     matrix_input_text.delete("1.0", "end")
     matrix_input_text.grid(row=1, column=1, columnspan=3, ipadx=4, ipady=4, pady=6, sticky="nsew")
@@ -98,7 +87,6 @@ def show_matrix_input():  # показывает ввод матрицы
 
 
 def close_matrix_input():  # скрывает ввод матрицы
-    global matrix_input_text, matrix_input_lbl, matrix_input_btn_done, matrix_input_btn_cancel
     matrix_input_text.grid_forget()
     matrix_input_lbl.grid_forget()
     matrix_input_btn_done.grid_forget()
@@ -106,7 +94,6 @@ def close_matrix_input():  # скрывает ввод матрицы
 
 
 def show_number_input():  # показывает ввод числа
-    global number_input_lbl, number_input_entry, number_input_btn_done, number_input_btn_cancel
     number_input_lbl.grid(row=0, column=1, columnspan=3, ipadx=4, ipady=4, pady=6, sticky="nsew")
     number_input_entry.delete(0, "end")
     number_input_entry.grid(row=1, column=1, columnspan=3, ipadx=4, ipady=4, pady=6, sticky="nsew")
@@ -114,8 +101,7 @@ def show_number_input():  # показывает ввод числа
     number_input_btn_cancel.grid(row=2, column=3, ipadx=4, ipady=4, pady=6, sticky="nsew")
 
 
-def close_number_input():  # показывает вывод числа
-    global number_input_lbl, number_input_entry, number_input_btn_done, number_input_btn_cancel
+def close_number_input():  # скрывает вывод числа
     number_input_lbl.grid_forget()
     number_input_entry.grid_forget()
     number_input_btn_done.grid_forget()
@@ -123,8 +109,6 @@ def close_number_input():  # показывает вывод числа
 
 
 def show_matrix_output():  # показываем вывод итоговой матрицы
-    global matrix_output_lbl, matrix_output_lbl_result, matrix_output_btn_done, rows_output, columns_output,\
-        matrix_output, matrix_output_btn_cancel
     matrix_output_lbl.configure(text=f"Ваша итоговая матрица с размерами {rows_output} x {columns_output}:")
     matrix_output_lbl.grid(row=0, column=1, columnspan=3, ipadx=4, ipady=4, pady=6, sticky="nsew")
     matrix_output_lbl_result.configure(text=matrix_output)
@@ -134,7 +118,6 @@ def show_matrix_output():  # показываем вывод итоговой м
 
 
 def close_matrix_output():  # скрывает вывод итоговой матрицы
-    global matrix_output_lbl, matrix_output_lbl_result, matrix_output_btn_done, matrix_output_btn_cancel
     matrix_output_lbl.grid_forget()
     matrix_output_lbl_result.grid_forget()
     matrix_output_btn_done.grid_forget()
@@ -142,7 +125,6 @@ def close_matrix_output():  # скрывает вывод итоговой ма�
 
 
 def show_check_output():  # показывает вывод проверки матрицы
-    global check_output_lbl, check_output, check_output_btn_done, check_output_btn_cancel
     check_output_lbl.configure(text=check_output)
     check_output_lbl.grid(row=1, column=1, columnspan=3, ipadx=4, ipady=4, pady=6, sticky="nsew")
     check_output_btn_done.grid(row=2, column=1, ipadx=4, ipady=4, pady=6, sticky="nsew")
@@ -150,7 +132,6 @@ def show_check_output():  # показывает вывод проверки м�
 
 
 def close_check_output():  # скрывает вывод проверки матрицы
-    global check_output_lbl, check_output_btn_done, check_output_btn_cancel
     check_output_lbl.grid_forget()
     check_output_btn_done.grid_forget()
     check_output_btn_cancel.grid_forget()
@@ -199,8 +180,7 @@ def handle_pressing_menu_btn_6():
 
 
 def handle_pressing_matrix_size_input_btn_done():
-    global rows_input, columns_input, columns_input_entry, op_type, op_step, rows_1_input, columns_1_input,\
-        rows_2_input, columns_2_input
+    global op_step, rows_input, columns_input, rows_1_input, columns_1_input, rows_2_input, columns_2_input
     # !!! пока предположим, что пользователь действительно что-то ввёл
     if 1 <= op_type <= 3:
         rows_input, columns_input = rows_input_entry.get(), columns_input_entry.get()
@@ -232,8 +212,8 @@ def handle_pressing_matrix_size_input_btn_cancel():
 
 
 def handle_pressing_matrix_input_btn_done():
-    global matrix_input, matrix_input_text, op_type, op_step, rows_output, columns_output, matrix_output, check_output,\
-        matrix_1_input, rows_1_input, columns_1_input, matrix_2_input, rows_2_input, columns_2_input
+    global op_step, matrix_input, rows_output, columns_output, matrix_output, check_output,\
+        matrix_1_input, matrix_2_input
     # !!! пока предположим, что пользователь ввел матрицу верно
     if 1 <= op_type <= 3:
         matrix_input = matrix_input_text.get("1.0", "end")
@@ -275,7 +255,7 @@ def handle_pressing_matrix_input_btn_done():
 
 
 def handle_pressing_matrix_input_btn_cancel():
-    global op_type, op_step
+    global op_step
     if 1 <= op_type <= 3:
         op_step = "matrix_size_input"
     else:
@@ -288,8 +268,7 @@ def handle_pressing_matrix_input_btn_cancel():
 
 
 def handle_pressing_number_input_btn_done():
-    global number_input, number_input_entry, matrix_output, rows_input, columns_input, matrix_input, op_step,\
-        rows_output, columns_output
+    global number_input, matrix_output, op_step, rows_output, columns_output
     number_input = number_input_entry.get()
     op_step = "matrix_output"
     close_number_input()
@@ -314,7 +293,7 @@ def handle_pressing_matrix_output_btn_done():
 
 
 def handle_pressing_matrix_output_btn_cancel():
-    global op_type, op_step
+    global op_step
     close_matrix_output()
     if op_type == 1:
         op_step = "number_input"
